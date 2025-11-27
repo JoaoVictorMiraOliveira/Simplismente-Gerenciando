@@ -10,7 +10,6 @@ import {
   ChevronRight,
   Wallet,
   Calendar,
-  LogOut,
   Sun,
   Moon
 } from 'lucide-react';
@@ -20,7 +19,6 @@ import { TransactionForm } from './components/TransactionForm';
 import { RecurringTransactionForm } from './components/RecurringTransactionForm';
 import { AiAdvisor } from './components/AiAdvisor';
 import { CalendarView } from './components/CalendarView';
-import { Login } from './components/Login';
 import { Transaction, PaymentStatus, TransactionType, User } from './types';
 import { INITIAL_TRANSACTIONS } from './constants';
 
@@ -32,7 +30,13 @@ type Theme = 'light' | 'dark';
 
 const App: React.FC = () => {
   // State
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>({
+    id: 'u1',
+    name: 'Usuário Exemplo',
+    email: 'usuario@gmail.com',
+    photoUrl: 'https://ui-avatars.com/api/?name=Usuario+Exemplo&background=0D8ABC&color=fff'
+  });
+  
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -63,23 +67,6 @@ const App: React.FC = () => {
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  // Authentication Handlers
-  const handleLogin = () => {
-    // Simulated User Data
-    const mockUser: User = {
-      id: 'u1',
-      name: 'Usuário Exemplo',
-      email: 'usuario@gmail.com',
-      photoUrl: 'https://ui-avatars.com/api/?name=Usuario+Exemplo&background=0D8ABC&color=fff'
-    };
-    setUser(mockUser);
-  };
-
-  const handleLogout = () => {
-    setUser(null);
-    setActiveTab('dashboard');
   };
 
   // Navigation
@@ -181,11 +168,6 @@ const App: React.FC = () => {
 
   // Filter transactions for the current month view (List and Calendar)
   const currentMonthTransactions = transactions.filter(t => t.date.startsWith(currentMonthStr));
-
-  // Render Login if no user
-  if (!user) {
-    return <Login onLogin={handleLogin} />;
-  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col md:flex-row animate-fade-in transition-colors duration-200">
@@ -290,12 +272,6 @@ const App: React.FC = () => {
               <p className="text-xs text-slate-500 dark:text-slate-500 truncate">{user.email}</p>
             </div>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-700 py-2 rounded-lg text-sm font-medium transition-colors border border-transparent hover:border-rose-100 dark:hover:border-rose-900/30"
-          >
-            <LogOut size={18} /> Sair
-          </button>
         </div>
       </aside>
 
